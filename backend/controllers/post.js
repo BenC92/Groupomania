@@ -1,7 +1,7 @@
 const db = require('../config/database');
 const fs = require('fs');
 
-// Post request controller
+
 exports.creatPost = (req, res) => {
     const body = req.file ?
         {
@@ -12,7 +12,7 @@ exports.creatPost = (req, res) => {
     const event = new Date(Date.now());
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     const timestamp = event.toLocaleDateString('en-US', options);
-    // Inserrs data into the posts table
+    
     db.query(`INSERT INTO posts (textual_post, image_url, creation_date, user_id) VALUES (?, ?, ?, ?)`,
         [body.textual_post, body.image_url, timestamp, req.params.id],
         (err, result) => { 
@@ -25,9 +25,9 @@ exports.creatPost = (req, res) => {
 };
 
 
-// Get request controller for all posts
+
 exports.getAllPosts = (req, res) => {
-    // Gets all the data from posts & users tables based on conditions
+   
            
     db.query(`SELECT users.id, users.firstName, users.lastName, users.imageUrl, isAdmin,
                 posts.post_id, posts.textual_post, posts.image_url, posts.creation_date,
@@ -54,7 +54,7 @@ exports.getAllPosts = (req, res) => {
 };
 
 
-// Put request controller
+
 exports.modifiyPost = (req, res) => {
 // The commented lines below are not used for now!
     // const body = req.file ?
@@ -76,10 +76,10 @@ exports.modifiyPost = (req, res) => {
 };
 
 
-// Delete request controller
+
 exports.deletePost = (req, res) => {
     
-    // Selects all the data from the posts table whose id is equal to the id sent by the request
+    
     db.query(`SELECT * FROM posts WHERE post_id = ?`, req.params.id,
         (err, postResult) => {
             if (err) {
@@ -89,7 +89,7 @@ exports.deletePost = (req, res) => {
             if(postResult[0].image_ur != null ) {
                 const filename = postResult[0].image_url.split('/posts/')[1];
                 fs.unlink(`images/posts/${filename}`, () => {
-                    // Removes all the data from posts table where the id is equal to the id sent by the request
+                    
                     db.query(`DELETE FROM posts WHERE post_id = ?`, req.params.id,
                         (err, result) => {
                             if (err) {

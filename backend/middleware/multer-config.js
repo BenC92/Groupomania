@@ -7,7 +7,7 @@ const MIME_TYPES = {
     'image/png': 'png',
     'image/svg+xml': 'svg'
 };
-// It's a configration object that sets the file name and its extension
+
 const storage = multer.diskStorage({
 	destination: (req, file, callback) => callback(null, file.fieldname === 'profile_image' ? 'images/profiles' : 'images/posts'),
 	filename: (req, file, callback) => {

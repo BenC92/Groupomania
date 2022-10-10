@@ -3,16 +3,15 @@ const db = require('../config/database');
 const bcrypt = require('bcrypt');
 const fs = require('fs');
 
-// Post request controller 
 exports.addDataToUserProfile = (req, res) => {
-	// Checks the body obj whether is empty or not
+	
 	function isBodyEmpty(bio) {
 		if (bio !== null) {
 			return true;
 		}
 		return false;
 	};
-	// // Checks the file obj whether is empty or not
+	
 	function isFileEmpty(file) {
 		if (file !== undefined) {
 			return true;
@@ -21,7 +20,7 @@ exports.addDataToUserProfile = (req, res) => {
     }; 
 
 	if (req.body.bio && isFileEmpty(req.file)) {
-		// Adds the bio and imageUrl to the database
+		
 		const imageUrl = `${req.protocol}://${req.get('host')}/images/profiles/${req.file.filename}`;
 		db.query(`UPDATE users SET bio = ?, imageUrl = ? WHERE id = ?`,
 			[`${req.body.bio}`, `${imageUrl}`, req.params.id],
@@ -34,7 +33,7 @@ exports.addDataToUserProfile = (req, res) => {
 		);
     }
 	else if (req.body.bio && !isFileEmpty(req.file)) {
-		// Adds only the bio to the database
+		
 		db.query(`UPDATE users SET bio = ? WHERE id = ?`,
 			[`${req.body.bio}`, req.params.id],
 			(err, result) => {
@@ -46,7 +45,7 @@ exports.addDataToUserProfile = (req, res) => {
 		);
     }
 	else if (!req.body.bio && isFileEmpty(req.file)) {
-		// Adds only the imageUrl to the database
+		
 		const imageUrl = `${req.protocol}://${req.get('host')}/images/profiles${req.file.filename}`;
 		db.query(`UPDATE users SET imageUrl = ? WHERE id = ?`,
 			[`${imageUrl}`, req.params.id],
@@ -64,9 +63,9 @@ exports.addDataToUserProfile = (req, res) => {
 };
 
 
-// Get request controller
+
 exports.getOneUser = (req, res) => {
-	// Selects user's data from the database and send them as a response
+	
     db.query(`SELECT * FROM users WHERE id = ?`, req.params.id,
         (err, result) => {
             if (err) {
@@ -79,13 +78,12 @@ exports.getOneUser = (req, res) => {
 };
 
 
-// Patch request controller
 exports.modifiyOneUser = (req, res) => {
 	
 	if (req.body.passwords != 'undefined') {
 		const { newPassword, oldPassword  } = JSON.parse(req.body.passwords);
 		
-		// Replaces the old user's password with new one
+		
 		db.query(`SELECT password FROM users WHERE id = ?`, req.params.id,
 			(err, result) => {
 				if (err) {
@@ -114,7 +112,7 @@ exports.modifiyOneUser = (req, res) => {
 		);
 	} else if (req.body.newEmail != 'undefined') {
 		const { newEmail } = JSON.parse(req.body);
-		// Changes the old user's email with the new one
+		
 		db.query(`SELECT email FROM users WHERE email = ?`, `${newEmail}`,
 			(err, resulat) => {
 				if (err) {
@@ -136,7 +134,7 @@ exports.modifiyOneUser = (req, res) => {
 		);
 	} 
 	else if (req.body.bio != 'undefined' && req.body.bio != 'null' && req.body.jobTitle != 'undefined' && req.body.jobTitle != 'null') {
-		// Upadtes user's job title & user's bio
+		
 		db.query(`UPDATE users SET bio = ?, jobTitle = ? WHERE id = ?`,
 			[`${req.body.bio}`, `${req.body.jobTitle}`, req.params.id],
 			(err, result) => {
@@ -147,7 +145,7 @@ exports.modifiyOneUser = (req, res) => {
 			}
 		);
 	} else if (req.body.jobTitle != 'undefined' && req.body.jobTitle != 'null' && req.body.bio == 'null') {
-		// Updates user's jobTitle
+		
 		db.query(`UPDATE users SET jobTitle = ? WHERE id = ?`,
 			[`${req.body.jobTitle}`, req.params.id],
 			(err, result) => {
@@ -159,7 +157,7 @@ exports.modifiyOneUser = (req, res) => {
 		);
 	}
 	else if (req.body.bio != 'undefined' && req.body.bio != 'null' && req.body.jobTitle == 'null') {
-		// Updates user's bio
+		
 		db.query(`UPDATE users SET bio = ? WHERE id = ?`,
 			[`${req.body.bio}`, req.params.id],
 			(err, result) => {
@@ -170,7 +168,7 @@ exports.modifiyOneUser = (req, res) => {
 			}
 		);
 	} else if (req.file) {
-		// Replaces the user's profile image 
+		
 		const imageUrl = `${req.protocol}://${req.get('host')}/images/profiles/${req.file.filename}`;
 		db.query(`UPDATE users SET imageUrl = ? WHERE id = ?`,
 			[`${imageUrl}`, req.params.id],
@@ -185,7 +183,7 @@ exports.modifiyOneUser = (req, res) => {
 };
 
 
-// Delete request controlller 
+
 exports.deleteOneUser = (req, res) => {
 
 // The commented lines below are not used for now!

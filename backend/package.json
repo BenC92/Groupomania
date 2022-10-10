@@ -10,7 +10,7 @@
 		"start": "node server",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
-	"author": "Mukhtar Sulaiman",
+	"author": "Ben Collick",
 	"license": "ISC",
 	"dependencies": {
 		"bcrypt": "^5.0.1",
