@@ -56,13 +56,7 @@ exports.getAllPosts = (req, res) => {
 
 
 exports.modifiyPost = (req, res) => {
-// The commented lines below are not used for now!
-    // const body = req.file ?
-    //     {
-    //         ...req.body,
-    //         image_url: `${req.protocol}://${req.get('host')}/images/posts/${req.file.filename}`,
-    //     } : { ...req.body };
-    // Updates posts table content
+
     db.query(`UPDATE posts SET textual_post = ? WHERE post_id = ?`,
         [`${req.body.textual_post}`, `${req.params.id}`],
         (err, result) => {
